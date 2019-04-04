@@ -69,23 +69,17 @@ CREATE TABLE [user] (
 );
 
 CREATE TABLE rating (
-	id				int			NOT NULL,
+	[game_id]				int			NOT NULL,
 	[user_id]		int			NOT NULL,
 	score			int			NOT NULL CHECK (score BETWEEN 1 AND 5),
 	timestamp		date		NOT NULL,
 
-	constraint pk_rating_id primary key (id),
-	constraint fk_rating_user_id foreign key ([user_id]) references [user](id)
+	constraint fk_rating_user_id foreign key ([user_id]) REFERENCES [user](id),
+	constraint fk_rating_game_id foreign key (game_id) REFERENCES games(id),
+	constraint pk_user_game_rating primary key (game_id, [user_id])
 );
 
-CREATE TABLE game_rating (
-	rating_id		int			NOT NULL,
-	game_id			int			NOT NULL,
 
-	constraint fk_game_rating_game_id	foreign key (game_id) references games(id),
-	constraint fk_game_rating_rating_id	foreign key (rating_id) references rating(id),
-	constraint pk_game_rating primary key (rating_id, game_id)
-);
 
 CREATE TABLE borrowed (
 	game_id		int NOT NULL,			
