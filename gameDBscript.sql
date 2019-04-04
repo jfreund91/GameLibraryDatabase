@@ -29,23 +29,6 @@ CREATE TABLE games
 	constraint pk_game_id primary key(id)
 	);
 
-CREATE TABLE borrowed
-(
-	id			int			IDENTITY(1,1),
-	borrowed	bit			NOT NULL,
-	borrowed_by	nvarchar(100) NOT NULL
-
-	constraint pk_borrowed primary key(id)
-);
-
-CREATE TABLE game_borrowed
-(
-	game_id		int			NOT NULL,
-	borrowed_id	int			NOT NULL,
-
-	constraint fk_game_id foreign key (game_id) REFERENCES games(id),
-	constraint fk_borrowed_id foreign key (borrowed_id) REFERENCES borrowed(id)
-);
 CREATE TABLE category
 (
 	id			int				identity(1,1),
@@ -103,6 +86,16 @@ CREATE TABLE game_rating (
 	constraint fk_game_rating_rating_id	foreign key (rating_id) references rating(id),
 	constraint pk_game_rating primary key (rating_id, game_id)
 );
+
+CREATE TABLE borrowed (
+	game_id		int NOT NULL,			
+	[user_id]	int NOT NULL,
+
+	constraint fk_borrowed_user_id foreign key ([user_id]) REFERENCES [user](id),
+	constraint fk_borrowed_game_id foreign key (game_id) REFERENCES games(id),
+	constraint pk_user_game_borrowed primary key (game_id, [user_id])
+);
+
 set identity_insert mechanic ON;
 
 INSERT INTO mechanic (id, mechanic_name)
